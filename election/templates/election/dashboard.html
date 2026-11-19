@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+{% block title %}Overview | Bincom Elections{% endblock %}
+{% block content %}
+<section class="relative overflow-hidden rounded-[28px] bg-[#102F61] px-6 py-9 text-white shadow-sm sm:px-10 sm:py-12 lg:px-12">
+    <div class="pointer-events-none absolute -right-20 -top-20 size-80 rounded-full bg-blue-400/10 blur-3xl" aria-hidden="true"></div>
+    <div class="pointer-events-none absolute -bottom-36 right-24 size-80 rounded-full bg-sky-400/10 blur-3xl" aria-hidden="true"></div>
+    <div class="relative grid gap-9 lg:grid-cols-[1.25fr_.75fr] lg:items-center">
+        <div>
+            <div class="mb-5 inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-3.5 py-1.5 text-xs font-semibold tracking-wide text-blue-100">
+                <span class="size-2 rounded-full bg-emerald-300"></span> Delta State · Election dataset
+            </div>
+            <h1 class="max-w-2xl text-3xl font-extrabold tracking-tight sm:text-4xl lg:text-[44px] lg:leading-[1.13]">Election results,<br><span class="text-blue-200">without the confusion.</span></h1>
+            <p class="mt-5 max-w-xl text-sm leading-7 text-blue-100 sm:text-base">Find a polling unit, explore party votes by local government, or register new results—all in one simple place.</p>
+            <div class="mt-7 flex flex-col gap-3 sm:flex-row">
+                <a href="{% url 'polling_units' %}" class="inline-flex items-center justify-center gap-2 rounded-xl bg-white px-5 py-3.5 text-sm font-bold text-[#12376F] shadow-sm transition hover:bg-blue-50">Browse polling units <span aria-hidden="true">→</span></a>
+                <a href="{% url 'lga_result' %}" class="inline-flex items-center justify-center gap-2 rounded-xl border border-white/25 bg-white/10 px-5 py-3.5 text-sm font-bold text-white transition hover:bg-white/20">Explore LGA results <span aria-hidden="true">↗</span></a>
+            </div>
+        </div>
+        <div class="rounded-2xl border border-white/15 bg-white/10 p-6 backdrop-blur-sm sm:p-7">
+            <div class="flex items-center justify-between">
+                <span class="text-xs font-bold uppercase tracking-[.14em] text-blue-200">Dataset snapshot</span>
+                <svg class="size-6 text-blue-200" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="M4 19V9m5 10V5m5 14v-7m5 7V8" stroke-linecap="round"/><path d="M2 21h20"/></svg>
+            </div>
+            <p class="mt-5 text-5xl font-extrabold tracking-tight tabular-nums">{{ reporting_count }}</p>
+            <p class="mt-2 text-sm text-blue-100">Polling units with recorded results</p>
+            <div class="mt-6 border-t border-white/15 pt-5 text-sm text-blue-100">From <strong class="text-white">{{ polling_unit_count }}</strong> polling units in the supplied database</div>
+        </div>
+    </div>
+</section>
+
+<section class="mt-7 grid grid-cols-2 gap-4 lg:grid-cols-4" aria-label="Dataset statistics">
+    <div class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm"><div class="mb-4 flex size-10 items-center justify-center rounded-xl bg-blue-50 text-blue-700" aria-hidden="true"><svg class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 10 12 4l8 6v10H4V10Zm5 10v-7h6v7"/></svg></div><p class="text-xs font-medium text-slate-500">Local governments</p><p class="mt-1 text-3xl font-extrabold tracking-tight tabular-nums">{{ lga_count }}</p></div>
+    <div class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm"><div class="mb-4 flex size-10 items-center justify-center rounded-xl bg-violet-50 text-violet-700" aria-hidden="true"><svg class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="4" y="5" width="16" height="14" rx="2"/><path d="M4 11h16M10 11v8"/></svg></div><p class="text-xs font-medium text-slate-500">Electoral wards</p><p class="mt-1 text-3xl font-extrabold tracking-tight tabular-nums">{{ ward_count }}</p></div>
+    <div class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm"><div class="mb-4 flex size-10 items-center justify-center rounded-xl bg-amber-50 text-amber-700" aria-hidden="true"><svg class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M5 20h14M7 20V8l5-4 5 4v12M10 12h4m-4 4h4"/></svg></div><p class="text-xs font-medium text-slate-500">Polling units</p><p class="mt-1 text-3xl font-extrabold tracking-tight tabular-nums">{{ polling_unit_count }}</p></div>
+    <div class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm"><div class="mb-4 flex size-10 items-center justify-center rounded-xl bg-emerald-50 text-emerald-700" aria-hidden="true"><svg class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="m4 12 5 5L20 6"/></svg></div><p class="text-xs font-medium text-slate-500">Units with results</p><p class="mt-1 text-3xl font-extrabold tracking-tight tabular-nums">{{ reporting_count }}</p></div>
+</section>
+
+<section class="mt-8 grid gap-6 lg:grid-cols-[1.35fr_.85fr]">
+    <div class="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
+        <div class="flex flex-wrap items-center justify-between gap-3 border-b border-slate-100 px-6 py-5">
+            <div><h2 class="text-lg font-bold">Polling units with results</h2><p class="mt-1 text-sm text-slate-500">Quick access to recorded results</p></div>
+            <a href="{% url 'polling_units' %}" class="text-sm font-bold text-blue-700 hover:text-blue-900">View all <span aria-hidden="true">→</span></a>
+        </div>
+        <div class="divide-y divide-slate-100">
+            {% for unit in recent_units %}
+            <a href="{% url 'polling_unit_result' unit.uniqueid %}" class="flex items-center justify-between gap-4 px-6 py-4 transition hover:bg-slate-50">
+                <span class="flex min-w-0 items-center gap-3.5">
+                    <span class="flex size-10 shrink-0 items-center justify-center rounded-xl bg-blue-50 text-blue-700" aria-hidden="true"><svg class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M5 3h14v18H5zM9 8h6M9 12h6M9 16h4"/></svg></span>
+                    <span class="min-w-0"><span class="block truncate text-sm font-bold text-slate-800">{{ unit.polling_unit_name|default:unit.polling_unit_number|default:'Unnamed polling unit' }}</span><span class="mt-0.5 block text-xs text-slate-500">{{ unit.display_lga }} · Unit #{{ unit.uniqueid }}</span></span>
+                </span>
+                <span class="shrink-0 text-blue-700" aria-hidden="true">→</span>
+            </a>
+            {% empty %}<p class="p-6 text-sm text-slate-500">There are no recorded polling-unit results yet.</p>{% endfor %}
+        </div>
+    </div>
+    <div class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+        <span class="mb-4 flex size-12 items-center justify-center rounded-2xl bg-emerald-50 text-emerald-700" aria-hidden="true"><svg class="size-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M12 5v14M5 12h14"/></svg></span>
+        <h2 class="text-xl font-extrabold tracking-tight">Have new results to add?</h2>
+        <p class="mt-2 text-sm leading-6 text-slate-600">Register a new polling unit, choose its ward, and enter scores for all nine parties in one form.</p>
+        <a href="{% url 'create_poll_result' %}" class="mt-6 inline-flex items-center gap-2 rounded-xl bg-[#173E7A] px-5 py-3 text-sm font-bold text-white transition hover:bg-[#0E2D5F]">Add polling unit <span aria-hidden="true">→</span></a>
+        <div class="mt-6 border-t border-slate-100 pt-4 text-xs leading-5 text-slate-500">All party results are stored together. Existing records stay unchanged.</div>
+    </div>
+</section>
+{% endblock %}

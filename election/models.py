@@ -1,0 +1,224 @@
+
+from django.db import models
+
+
+class Agentname(models.Model):
+    name_id = models.AutoField(primary_key=True, blank=True)
+    firstname = models.CharField(max_length=255)
+    lastname = models.CharField(max_length=255)
+    email = models.CharField(max_length=255, blank=True, null=True)
+    phone = models.CharField(max_length=13)
+    pollingunit_uniqueid = models.IntegerField()
+
+    class Meta:
+        managed = False
+        db_table = 'agentname'
+
+    def __str__(self):
+        return f"{self.firstname}-{self.lastname}"
+
+
+class AnnouncedLgaResult(models.Model):
+    result_id = models.AutoField(primary_key=True, blank=True)
+    lga_name = models.CharField(max_length=50)
+    party_abbreviation = models.CharField(max_length=4)
+    party_score = models.IntegerField()
+    entered_by_user = models.CharField(max_length=50)
+
+    date_entered = models.CharField(max_length=19)
+
+    user_ip_address = models.CharField(max_length=50)
+
+    class Meta:
+        managed = False
+        db_table = 'announced_lga_results'
+
+    def __str__(self):
+        return f"LgaResult-<{self.result_id}>-{self.party_abbreviation}"
+
+
+class AnnouncedPuResult(models.Model):
+    result_id = models.AutoField(primary_key=True, blank=True)
+    polling_unit_uniqueid = models.CharField(max_length=50)
+    party_abbreviation = models.CharField(max_length=4)
+    party_score = models.IntegerField()
+    entered_by_user = models.CharField(max_length=50)
+
+    date_entered = models.CharField(max_length=19)
+
+    user_ip_address = models.CharField(max_length=50)
+
+    class Meta:
+        managed = False
+        db_table = 'announced_pu_results'
+
+    def __str__(self):
+        return f"PuResult-<{self.result_id}>-{self.party_abbreviation}"
+
+
+class AnnouncedStateResult(models.Model):
+    result_id = models.AutoField(primary_key=True, blank=True)
+    state_name = models.CharField(max_length=50)
+    party_abbreviation = models.CharField(max_length=4)
+    party_score = models.IntegerField()
+    entered_by_user = models.CharField(max_length=50)
+
+    date_entered = models.CharField(max_length=19)
+
+    user_ip_address = models.CharField(max_length=50)
+
+    class Meta:
+        managed = False
+        db_table = 'announced_state_results'
+
+    def __str__(self):
+        return f"StateResult-<{self.result_id}>-{self.party_abbreviation}"
+
+
+class AnnouncedWardResult(models.Model):
+    result_id = models.AutoField(primary_key=True, blank=True)
+    ward_name = models.CharField(max_length=50)
+    party_abbreviation = models.CharField(max_length=4)
+    party_score = models.IntegerField()
+    entered_by_user = models.CharField(max_length=50)
+
+    date_entered = models.CharField(max_length=19)
+
+    user_ip_address = models.CharField(max_length=50)
+
+    class Meta:
+        managed = False
+        db_table = 'announced_ward_results'
+
+    def __str__(self):
+        return f"WardResult-<{self.result_id}>-{self.party_abbreviation}"
+
+
+class Lga(models.Model):
+    uniqueid = models.AutoField(primary_key=True, blank=True)
+    lga_id = models.IntegerField()
+    lga_name = models.CharField(max_length=50)
+    state_id = models.IntegerField()
+    lga_description = models.TextField(blank=True, null=True)
+    entered_by_user = models.CharField(max_length=50)
+
+    date_entered = models.CharField(max_length=19)
+
+    user_ip_address = models.CharField(max_length=50)
+
+    class Meta:
+        managed = False
+        db_table = 'lga'
+
+    def __str__(self):
+        return self.lga_name
+
+
+class Party(models.Model):
+    partyid = models.CharField(max_length=11)
+    partyname = models.CharField(max_length=11)
+
+    class Meta:
+        managed = False
+        db_table = 'party'
+
+    def __str__(self):
+        return self.partyname
+
+
+class PollingUnit(models.Model):
+    uniqueid = models.AutoField(primary_key=True, blank=True)
+    polling_unit_id = models.IntegerField()
+    ward_id = models.IntegerField()
+    lga_id = models.IntegerField()
+    uniquewardid = models.IntegerField(blank=True, null=True)
+
+    polling_unit_number = models.CharField(
+        max_length=50,
+        blank=True,
+        null=True
+    )
+
+    polling_unit_name = models.CharField(
+        max_length=50,
+        blank=True,
+        null=True
+    )
+
+    polling_unit_description = models.TextField(
+        blank=True,
+        null=True
+    )
+
+    lat = models.CharField(
+        max_length=255,
+        blank=True,
+        null=True
+    )
+
+    long = models.CharField(
+        max_length=255,
+        blank=True,
+        null=True
+    )
+
+    entered_by_user = models.CharField(
+        max_length=50,
+        blank=True,
+        null=True
+    )
+
+    date_entered = models.CharField(
+        max_length=19,
+        blank=True,
+        null=True
+    )
+
+    user_ip_address = models.CharField(
+        max_length=50,
+        blank=True,
+        null=True
+    )
+
+    class Meta:
+        managed = False
+        db_table = 'polling_unit'
+
+    def __str__(self):
+        return (
+            self.polling_unit_name
+            or self.polling_unit_number
+            or f"Polling Unit {self.uniqueid}"
+        )
+
+
+class State(models.Model):
+    state_id = models.AutoField(primary_key=True)
+    state_name = models.CharField(max_length=50)
+
+    class Meta:
+        managed = False
+        db_table = 'states'
+
+    def __str__(self):
+        return self.state_name
+
+
+class Ward(models.Model):
+    uniqueid = models.AutoField(primary_key=True, blank=True)
+    ward_id = models.IntegerField()
+    ward_name = models.CharField(max_length=50)
+    lga_id = models.IntegerField()
+    ward_description = models.TextField(blank=True, null=True)
+    entered_by_user = models.CharField(max_length=50)
+
+    date_entered = models.CharField(max_length=19)
+
+    user_ip_address = models.CharField(max_length=50)
+
+    class Meta:
+        managed = False
+        db_table = 'ward'
+
+    def __str__(self):
+        return self.ward_name

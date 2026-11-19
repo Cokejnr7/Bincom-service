@@ -1,0 +1,72 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#ffffff">
+    <meta name="description" content="Browse polling unit and local government election results in Delta State.">
+    <title>{% block title %}Bincom Elections{% endblock %}</title>
+    <!-- Official Tailwind CSS v4 Play CDN. Suitable for this development/demo project. -->
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <style>
+        /* A few non-framework defaults while the Play CDN is loading. */
+        :root { color-scheme: light; }
+        body { font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+        a, button, select, input { -webkit-tap-highlight-color: transparent; }
+        :focus-visible { outline: 3px solid #93c5fd; outline-offset: 3px; }
+    </style>
+    {% block head %}{% endblock %}
+</head>
+<body class="min-h-screen bg-[#F6F8FC] text-slate-900 antialiased">
+    <div class="min-h-screen flex flex-col">
+        <header class="sticky top-0 z-40 border-b border-slate-200 bg-white/95 backdrop-blur">
+            <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+                <div class="flex min-h-18 flex-wrap items-center justify-between gap-3 py-3 md:py-0">
+                    <a href="{% url 'home' %}" class="group inline-flex items-center gap-3 rounded-xl" aria-label="Bincom Elections home">
+                        <span class="flex size-10 items-center justify-center rounded-xl bg-[#173E7A] shadow-sm shadow-blue-200">
+                            <svg viewBox="0 0 24 24" class="size-6 text-white" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 8h10M7 12h7M7 16h4"/><path d="M4 3h16v18H4z"/></svg>
+                        </span>
+                        <span class="flex flex-col leading-tight">
+                            <span class="text-base font-extrabold tracking-tight text-slate-900">Bincom <span class="text-blue-700">Elections</span></span>
+                            <span class="mt-0.5 text-[11px] font-medium tracking-wide text-slate-500">DELTA STATE · RESULTS PORTAL</span>
+                        </span>
+                    </a>
+                    <nav class="order-3 flex w-full gap-1 overflow-x-auto pb-1 text-sm font-semibold md:order-2 md:w-auto md:items-center md:overflow-visible md:pb-0" aria-label="Main navigation">
+                        <a href="{% url 'home' %}" {% if request.resolver_match.url_name == 'home' %}aria-current="page"{% endif %} class="shrink-0 rounded-xl px-3.5 py-2.5 transition {% if request.resolver_match.url_name == 'home' %}bg-blue-50 text-blue-800{% else %}text-slate-600 hover:bg-slate-100 hover:text-slate-900{% endif %}">Overview</a>
+                        <a href="{% url 'polling_units' %}" {% if request.resolver_match.url_name == 'polling_units' or request.resolver_match.url_name == 'polling_unit_result' %}aria-current="page"{% endif %} class="shrink-0 rounded-xl px-3.5 py-2.5 transition {% if request.resolver_match.url_name == 'polling_units' or request.resolver_match.url_name == 'polling_unit_result' %}bg-blue-50 text-blue-800{% else %}text-slate-600 hover:bg-slate-100 hover:text-slate-900{% endif %}">Polling units</a>
+                        <a href="{% url 'lga_result' %}" {% if request.resolver_match.url_name == 'lga_result' %}aria-current="page"{% endif %} class="shrink-0 rounded-xl px-3.5 py-2.5 transition {% if request.resolver_match.url_name == 'lga_result' %}bg-blue-50 text-blue-800{% else %}text-slate-600 hover:bg-slate-100 hover:text-slate-900{% endif %}">LGA results</a>
+                        <a href="{% url 'create_poll_result' %}" {% if request.resolver_match.url_name == 'create_poll_result' %}aria-current="page"{% endif %} class="shrink-0 rounded-xl px-3.5 py-2.5 transition {% if request.resolver_match.url_name == 'create_poll_result' %}bg-blue-50 text-blue-800{% else %}text-slate-600 hover:bg-slate-100 hover:text-slate-900{% endif %}">Add results</a>
+                    </nav>
+                    <a href="{% url 'create_poll_result' %}" class="order-2 hidden shrink-0 items-center gap-2 rounded-xl bg-[#173E7A] px-4 py-2.5 text-sm font-bold text-white shadow-sm transition hover:bg-[#0E2D5F] focus-visible:ring-4 focus-visible:ring-blue-200 md:order-3 lg:inline-flex">
+                        <svg class="size-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>
+                        New result
+                    </a>
+                </div>
+            </div>
+        </header>
+
+        <main id="main-content" class="mx-auto w-full max-w-7xl flex-1 px-4 py-7 sm:px-6 sm:py-9 lg:px-8">
+            {% if messages %}
+            <div class="mb-6 space-y-3" aria-live="polite">
+                {% for message in messages %}
+                <div role="status" class="flex items-start gap-3 rounded-2xl border border-emerald-200 bg-emerald-50 p-4 text-sm text-emerald-900 shadow-sm">
+                    <span class="mt-0.5 flex size-6 shrink-0 items-center justify-center rounded-full bg-emerald-100 text-emerald-700" aria-hidden="true">✓</span>
+                    <span>{{ message }}</span>
+                </div>
+                {% endfor %}
+            </div>
+            {% endif %}
+            {% block content %}{% endblock %}
+        </main>
+
+        <footer class="border-t border-slate-200 bg-white">
+            <div class="mx-auto flex max-w-7xl flex-col gap-2 px-4 py-5 text-xs text-slate-500 sm:flex-row sm:items-center sm:justify-between sm:px-6 lg:px-8">
+                <p><span class="font-semibold text-slate-700">Bincom Elections</span> · Assessment demonstration</p>
+                <p>Results reflect records in the supplied database.</p>
+            </div>
+        </footer>
+    </div>
+    {% block script %}{% endblock %}
+</body>
+</html>
